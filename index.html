@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اخبار رنگی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-dark:#1f4d34;--green:#2e6b47;--gold:#d7a339;--gold-dark:#b6842a;
+    --cream:#faf8f3;--ink:#1c2620;--line:#e3ddc9;--red:#b23a3a;
+    box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{margin:0;font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--cream);color:var(--ink);}
+  header{background:linear-gradient(180deg,var(--green-dark),var(--green));color:#fff;padding:14px 20px calc(14px + env(safe-area-inset-top,0px));}
+  .top-row{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;flex-wrap:wrap;gap:10px;}
+  .brand{display:flex;align-items:center;gap:8px;font-size:1.5rem;font-weight:800;}
+  .brand-dot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
+  .brand small{display:block;font-size:.7rem;font-weight:400;color:#cfe3d5;margin-top:2px;}
+  .actions{display:flex;gap:8px;align-items:center;}
+  .btn{border:none;border-radius:6px;padding:9px 16px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .btn-gold{background:var(--gold);color:var(--green-dark);}
+  .lang-group{display:flex;border:1px solid rgba(255,255,255,.5);border-radius:6px;overflow:hidden;}
+  .lang-btn{background:transparent;border:none;color:#fff;padding:8px 12px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;border-inline-start:1px solid rgba(255,255,255,.3);}
+  .lang-btn:first-child{border-inline-start:none;}
+  .lang-btn.active{background:var(--gold);color:var(--green-dark);}
+  nav{background:var(--gold);border-top:1px solid rgba(0,0,0,.08);}
+  nav ul{max-width:1100px;margin:0 auto;list-style:none;display:flex;padding:0 20px;overflow-x:auto;}
+  nav li a{display:block;padding:12px 16px;color:var(--green-dark);text-decoration:none;font-weight:600;font-size:.9rem;white-space:nowrap;cursor:pointer;}
+  nav li a.active{background:var(--green-dark);color:#fff;}
+  main{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
+
+  .fx-bar{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;}
+  .fx-card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+  .fx-name{font-size:.85rem;font-weight:700;color:var(--green-dark);}
+  .fx-sub{font-size:.7rem;color:#8a9188;margin-top:2px;}
+  .fx-price{font-size:1.15rem;font-weight:800;}
+  .fx-change{font-size:.78rem;font-weight:700;margin-top:3px;}
+  .fx-up{color:#2e8b47;}
+  .fx-down{color:var(--red);}
+  .fx-icon{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-weight:800;font-size:.85rem;flex:none;}
+
+  .top-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:18px;}
+  .card-list{display:flex;flex-direction:column;gap:14px;}
+  .mini-card{background:#fff;border:1px solid var(--line);border-radius:8px;display:flex;gap:12px;padding:12px;align-items:flex-start;cursor:pointer;position:relative;transition:box-shadow .15s ease;}
+  .mini-card:hover{box-shadow:0 2px 10px rgba(31,77,52,.12);}
+  .mini-thumb{width:70px;height:70px;flex:none;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;}
+  .mini-thumb.alt{background:linear-gradient(135deg,var(--green),var(--green-dark));}
+  .mini-thumb svg{width:36px;height:36px;}
+  .mini-card .cat{display:block;font-size:.72rem;color:var(--green);font-weight:700;margin-bottom:4px;}
+  .mini-card h3{margin:0;font-size:.95rem;line-height:1.6;font-weight:600;}
+  .hero{position:relative;border-radius:10px;overflow:hidden;cursor:pointer;background:linear-gradient(160deg,var(--green-dark),#12331f 80%);color:#fff;padding:36px 30px;min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;}
+  .hero .tag{position:absolute;top:18px;left:18px;background:var(--gold);color:var(--green-dark);font-size:.75rem;font-weight:700;padding:5px 12px;border-radius:4px;}
+  .hero h1{font-size:1.7rem;line-height:1.55;margin:0 0 14px;font-weight:800;max-width:80%;}
+  .hero p{font-size:.95rem;line-height:1.9;color:#dce8df;margin:0 0 16px;max-width:75%;}
+  .hero .meta{font-size:.8rem;color:#a9c6b2;}
+  .hero-empty{display:flex;align-items:center;justify-content:center;color:#a9c6b2;font-size:.9rem;min-height:300px;border:1px dashed rgba(255,255,255,.2);border-radius:10px;}
+
+  .del-btn{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;border:none;font-size:.85rem;line-height:1;cursor:pointer;z-index:2;}
+  .hero .del-btn{background:rgba(255,255,255,.2);}
+  .latest-card .del-btn{top:8px;left:8px;background:rgba(0,0,0,.4);}
+  .img-btn{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;border:none;font-size:.72rem;line-height:1;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;}
+  .hero .img-btn{background:rgba(255,255,255,.2);}
+  .mini-thumb img,.latest-thumb img{width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+  .hero.has-img{background-size:cover;background-position:center;}
+  .hero.has-img::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,51,31,.15),rgba(18,51,31,.88));}
+  .hero.has-img > *{position:relative;z-index:1;}
+  .drag-over{outline:3px dashed var(--gold);outline-offset:-3px;}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+  .divider h2{font-size:1.15rem;font-weight:800;color:var(--green-dark);margin:0;white-space:nowrap;}
+  .divider .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
+  .divider .rule{flex:1;height:1px;background:var(--line);}
+  .latest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+  .latest-card{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:pointer;position:relative;transition:box-shadow .15s ease;}
+  .latest-card:hover{box-shadow:0 2px 10px rgba(31,77,52,.12);}
+  .latest-thumb{height:130px;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;}
+  .latest-thumb svg{width:52px;height:52px;}
+  .latest-body{padding:12px 14px;}
+  .latest-body .cat{font-size:.7rem;color:var(--gold-dark);font-weight:700;}
+  .latest-body h3{font-size:.9rem;line-height:1.6;margin:6px 0 0;font-weight:600;}
+  .empty-msg{grid-column:1/-1;text-align:center;padding:30px;color:#8a9188;font-size:.9rem;}
+  footer{background:var(--green-dark);color:#cfe3d5;text-align:center;padding:20px;font-size:.8rem;}
+
+  .overlay{position:fixed;inset:0;background:var(--cream);display:none;padding:0;z-index:50;overflow-y:auto;}
+  .overlay.open{display:block;}
+  .modal{background:transparent;border-radius:0;max-width:none;width:100%;max-height:none;overflow-y:visible;position:relative;min-height:100%;}
+  .modal-hero{background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;height:40vh;min-height:260px;border-radius:0;position:relative;overflow:hidden;padding-top:env(safe-area-inset-top,0px);}
+  .modal-hero svg{width:110px;height:110px;}
+  .modal-hero img{width:100%;height:100%;object-fit:cover;}
+  .modal-body{padding:28px 24px 60px;max-width:720px;margin:0 auto;}
+  .modal-body .cat{font-size:.85rem;color:var(--gold-dark);font-weight:700;}
+  .modal-body h2{font-size:1.9rem;line-height:1.6;margin:10px 0 14px;font-weight:800;color:var(--green-dark);}
+  .modal-body .meta{font-size:.85rem;color:#7c8a80;margin-bottom:22px;display:block;}
+  .modal-body p{font-size:1.08rem;line-height:2.1;color:#2d3830;}
+  .modal-close{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);border:none;font-size:1.3rem;cursor:pointer;color:var(--green-dark);z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+  .write-modal{background:#fff;border-radius:12px;max-width:480px;width:100%;max-height:88vh;overflow-y:auto;position:relative;padding:26px 24px 22px;}
+  .write-modal h2{margin:0 0 16px;font-size:1.15rem;color:var(--green-dark);font-weight:800;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:.8rem;font-weight:700;margin-bottom:6px;color:var(--green-dark);}
+  .field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 10px;font-family:inherit;font-size:.88rem;background:var(--cream);color:var(--ink);}
+  .field textarea{min-height:90px;resize:vertical;}
+  .write-actions{display:flex;gap:10px;margin-top:6px;}
+  .write-actions .btn{flex:1;}
+  .btn-ghost{background:var(--cream);color:var(--green-dark);border:1px solid var(--line);}
+  @media(max-width:720px){
+    .top-grid{grid-template-columns:1fr;}
+    .fx-bar{grid-template-columns:1fr;}
+    .hero{padding:26px 20px;min-height:220px;}
+    .hero h1{font-size:1.3rem;max-width:100%;}
+    .hero p{max-width:100%;}
+  }
+  @media(prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){--cream:#14201a;--ink:#eef3ee;--line:#25352b;}
+    :root:not([data-theme="light"]) .mini-card,
+    :root:not([data-theme="light"]) .latest-card,
+    :root:not([data-theme="light"]) .fx-card,
+    :root:not([data-theme="light"]) .modal{background:#1a271f;color:#eef3ee;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-row">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span data-t="brand">اخبار رنگی</span>
+      <small style="margin-inline-start:8px;" data-t="tagline">درگاه خبری روزانه</small>
+    </div>
+    <div class="actions">
+      <button class="btn btn-gold" data-t="writeBtn" onclick="openWriteModal()">نوشتن خبر جدید ↑</button>
+      <div class="lang-group">
+        <button class="lang-btn active" data-lang="fa" onclick="setLang('fa')">فا</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">عربي</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul id="navList"></ul>
+</nav>
+
+<main>
+  <div class="fx-bar" id="fxBar"></div>
+
+  <div class="top-grid" id="topGrid">
+    <div class="card-list" id="sideList"></div>
+    <div class="hero" id="heroCard"></div>
+  </div>
+
+  <div class="divider">
+    <h2 id="sectionHeading">تازه‌ترین اخبار</h2>
+    <span class="dot"></span>
+    <span class="rule"></span>
+  </div>
+
+  <div class="latest-grid" id="latestGrid"></div>
+</main>
+
+<footer>
+  <span data-t="footer">© ۱۴۰۵ اخبار رنگی — تمامی حقوق محفوظ است</span>
+</footer>
+
+<input type="file" id="imgFileInput" accept="image/*" style="display:none" onchange="handleImgFile(event)">
+
+<div class="overlay" id="writeOverlay" onclick="if(event.target===this) closeWriteModal()">
+  <div class="write-modal">
+    <button class="modal-close" onclick="closeWriteModal()">×</button>
+    <h2 id="writeHeading">نوشتن خبر جدید</h2>
+    <div class="field">
+      <label id="lblCat">دسته‌بندی</label>
+      <select id="wCat"></select>
+    </div>
+    <div class="field">
+      <label id="lblTitle">عنوان خبر</label>
+      <input type="text" id="wTitle" placeholder="">
+    </div>
+    <div class="field">
+      <label id="lblSummary">خلاصه کوتاه (برای صفحه نخست)</label>
+      <textarea id="wSummary"></textarea>
+    </div>
+    <div class="field">
+      <label id="lblDetail">متن کامل خبر</label>
+      <textarea id="wDetail"></textarea>
+    </div>
+    <div class="write-actions">
+      <button class="btn btn-ghost" id="wCancel" onclick="closeWriteModal()">انصراف</button>
+      <button class="btn btn-gold" id="wSubmit" onclick="submitNews()">انتشار خبر</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-hero" id="modalHero"></div>
+    <div class="modal-body">
+      <span class="cat" id="modalCat"></span>
+      <h2 id="modalTitle"></h2>
+      <span class="meta" id="modalMeta"></span>
+      <div id="modalText"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var UI = {
+  fa:{brand:"اخبار رنگی",tagline:"درگاه خبری روزانه",writeBtn:"نوشتن خبر جدید ↑",
+      navHome:"صفحه نخست",navPolitics:"سیاست",navEconomy:"اقتصاد",navSports:"ورزش",navTech:"فناوری",navCulture:"فرهنگ و هنر",navSociety:"جامعه",
+      latestHeading:"تازه‌ترین اخبار",footer:"© ۱۴۰۵ اخبار رنگی — تمامی حقوق محفوظ است",
+      featured:"ویژه",noHero:"خبر ویژه‌ای برای نمایش وجود ندارد",noNews:"خبری در این دسته باقی نمانده",
+      usd:"دلار آمریکا",eur:"یورو",unit:"تومان",today:"نرخ امروز",
+      writeHeading:"نوشتن خبر جدید",lblCat:"دسته‌بندی",lblTitle:"عنوان خبر",lblSummary:"خلاصه کوتاه (برای صفحه نخست)",lblDetail:"متن کامل خبر",wCancel:"انصراف",wSubmit:"انتشار خبر",justNow:"همین الان منتشر شد",needFields:"لطفاً عنوان و متن خبر را وارد کنید"},
+  en:{brand:"Colorful News",tagline:"Daily news portal",writeBtn:"Write new article ↑",
+      navHome:"Home",navPolitics:"Politics",navEconomy:"Economy",navSports:"Sports",navTech:"Technology",navCulture:"Culture & Art",navSociety:"Society",
+      latestHeading:"Latest News",footer:"© 2026 Colorful News — All rights reserved",
+      featured:"Featured",noHero:"No featured article to show",noNews:"No articles left in this category",
+      usd:"US Dollar",eur:"Euro",unit:"Toman",today:"Today's rate",
+      writeHeading:"Write New Article",lblCat:"Category",lblTitle:"Article title",lblSummary:"Short summary (for the homepage)",lblDetail:"Full article text",wCancel:"Cancel",wSubmit:"Publish",justNow:"Published just now",needFields:"Please enter a title and article text"},
+  ar:{brand:"الأخبار الملونة",tagline:"بوابة الأخبار اليومية",writeBtn:"كتابة خبر جديد ↑",
+      navHome:"الرئيسية",navPolitics:"سياسة",navEconomy:"اقتصاد",navSports:"رياضة",navTech:"تقنية",navCulture:"ثقافة وفن",navSociety:"مجتمع",
+      latestHeading:"أحدث الأخبار",footer:"© 2026 الأخبار الملونة — جميع الحقوق محفوظة",
+      featured:"مميز",noHero:"لا يوجد خبر مميز لعرضه",noNews:"لا توجد أخبار في هذا القسم",
+      usd:"الدولار الأمريكي",eur:"اليورو",unit:"تومان",today:"سعر اليوم",
+      writeHeading:"كتابة خبر جديد",lblCat:"القسم",lblTitle:"عنوان الخبر",lblSummary:"ملخص قصير (للصفحة الرئيسية)",lblDetail:"نص الخبر الكامل",wCancel:"إلغاء",wSubmit:"نشر الخبر",justNow:"نُشر للتو",needFields:"يرجى إدخال العنوان والنص"}
+};
+var NAV_KEYS = [["all","navHome"],["politics","navPolitics"],["economy","navEconomy"],["sports","navSports"],["tech","navTech"],["culture","navCulture"],["society","navSociety"]];
+
+var ICONS = {
+  metro:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="10" width="36" height="36" rx="10" fill="#d7a339"/><rect x="20" y="18" width="10" height="12" rx="2" fill="#1f4d34"/><rect x="34" y="18" width="10" height="12" rx="2" fill="#1f4d34"/><circle cx="22" cy="40" r="3" fill="#1f4d34"/><circle cx="42" cy="40" r="3" fill="#1f4d34"/><rect x="18" y="46" width="6" height="8" rx="1" fill="#d7a339"/><rect x="40" y="46" width="6" height="8" rx="1" fill="#d7a339"/></svg>',
+  economy:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="34" width="9" height="20" fill="#1f4d34"/><rect x="24" y="24" width="9" height="30" fill="#1f4d34"/><rect x="38" y="14" width="9" height="40" fill="#1f4d34"/><path d="M10 30 L26 16 L38 22 L52 8" stroke="#d7a339" stroke-width="3" fill="none"/><path d="M44 8 L52 8 L52 16" stroke="#d7a339" stroke-width="3" fill="none"/></svg>',
+  sports:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 12h28v14a14 14 0 0 1-28 0V12z" fill="#d7a339"/><path d="M18 16h-6a6 6 0 0 0 6 10" stroke="#1f4d34" stroke-width="3" fill="none"/><path d="M46 16h6a6 6 0 0 1-6 10" stroke="#1f4d34" stroke-width="3" fill="none"/><rect x="28" y="40" width="8" height="8" fill="#1f4d34"/><rect x="22" y="48" width="20" height="6" rx="2" fill="#1f4d34"/></svg>',
+  culture:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="46" r="7" fill="#d7a339"/><circle cx="42" cy="40" r="7" fill="#d7a339"/><path d="M27 46V16l22-4v28" stroke="#1f4d34" stroke-width="3" fill="none"/></svg>',
+  tech:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="18" width="28" height="28" rx="4" fill="#d7a339"/><rect x="26" y="26" width="12" height="12" rx="2" fill="#1f4d34"/><g stroke="#1f4d34" stroke-width="2"><path d="M32 8v10M32 46v10M8 32h10M46 32h10M14 14l7 7M43 43l7 7M50 14l-7 7M21 43l-7 7"/></g></svg>',
+  politics:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 10 54 22H10z" fill="#d7a339"/><rect x="14" y="24" width="6" height="22" fill="#1f4d34"/><rect x="29" y="24" width="6" height="22" fill="#1f4d34"/><rect x="44" y="24" width="6" height="22" fill="#1f4d34"/><rect x="8" y="48" width="48" height="6" rx="1" fill="#1f4d34"/></svg>',
+  society:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="24" r="14" fill="#d7a339"/><rect x="29" y="34" width="6" height="18" fill="#1f4d34"/><path d="M18 54q14-8 28 0" stroke="#1f4d34" stroke-width="3" fill="none"/></svg>',
+  factory:'<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="34" width="44" height="20" fill="#d7a339"/><path d="M16 34V24l8 8v-8l8 8v-8l8 8" stroke="#1f4d34" stroke-width="3" fill="none"/><rect x="42" y="14" width="6" height="12" fill="#1f4d34"/></svg>'
+};
+
+var NEWS = [
+ {id:1,pos:"hero",icon:"metro",catKey:"society",
+  cat:{fa:"جامعه",en:"Society",ar:"مجتمع"},
+  title:{fa:"افتتاح خط جدید مترو، سفرهای شهری را کوتاه‌تر می‌کند",en:"New metro line opens, shortening commutes across the city",ar:"افتتاح خط مترو جديد يقصّر رحلات المدينة"},
+  summary:{fa:"مسئولان شهری از راه‌اندازی رسمی خط تازه مترو خبر دادند که قرار است زمان تردد در ساعات پرترافیک را به‌طور محسوسی کاهش دهد.",en:"City officials announced the official launch of the new metro line, expected to noticeably cut travel times during rush hour.",ar:"أعلن مسؤولو المدينة عن التشغيل الرسمي لخط المترو الجديد، ومن المتوقع أن يقلّص أوقات التنقل بشكل ملحوظ في ساعات الذروة."},
+  detail:{fa:"خط جدید مترو پس از دو سال ساخت‌وساز رسماً افتتاح شد و مسیر مناطق شرقی و مرکزی شهر را به هم متصل می‌کند. طبق برآورد شهرداری، این خط روزانه پذیرای بیش از صد هزار مسافر خواهد بود و بار ترافیکی معابر اصلی شهر را در ساعات اوج تردد به‌طور محسوسی کاهش می‌دهد.\n\nمسئولان شهری در مراسم افتتاحیه اعلام کردند که این پروژه یکی از بزرگ‌ترین طرح‌های زیرساختی حمل‌ونقل شهری در دهه اخیر بوده و با مشارکت چند شرکت داخلی و با استفاده از تجهیزات به‌روز اجرا شده است. طول کل این خط به بیش از هجده کیلومتر می‌رسد و شامل دوازده ایستگاه است که هفت ایستگاه آن به سایر خطوط مترو متصل می‌شود.\n\nایستگاه‌های این خط به سامانه‌های هوشمند بلیت، تابلوهای اطلاع‌رسانی لحظه‌ای و دوربین‌های نظارتی مجهز شده‌اند. مسئولان همچنین از برنامه‌ریزی برای توسعه خطوط مشابه در مناطق دیگر شهر طی سال‌های آینده خبر دادند و گفتند بودجه لازم برای فاز بعدی این طرح پیش‌بینی شده است.\n\nکارشناسان حمل‌ونقل شهری معتقدند راه‌اندازی این خط می‌تواند سهم استفاده از وسایل نقلیه عمومی را به‌طور قابل توجهی افزایش داده و از میزان آلودگی هوا در مناطق پرتردد بکاهد.",
+  en:"The new metro line was officially opened after two years of construction, connecting the city's eastern and central districts. City hall estimates it will carry more than a hundred thousand passengers daily, significantly easing congestion on major roads during peak hours.\n\nOfficials called it one of the largest urban transport infrastructure projects of the past decade, built with several domestic companies using modern equipment. The line stretches more than eighteen kilometers across twelve stations, seven of which connect to other metro lines.\n\nStations along the route are equipped with smart ticketing systems, real-time information boards, and surveillance cameras. Officials also announced plans to extend similar lines to other parts of the city in the coming years, saying funding for the next phase has already been allocated.\n\nUrban transport analysts believe the new line could meaningfully increase public transit ridership and reduce air pollution in the city's busiest areas.",
+  ar:"افتُتح خط المترو الجديد رسمياً بعد عامين من الإنشاء، ليربط بين المناطق الشرقية والوسطى من المدينة. وتقدّر البلدية أنه سيستوعب أكثر من مئة ألف راكب يومياً، ما يخفف بشكل كبير من الازدحام على الطرق الرئيسية في ساعات الذروة.\n\nووصف المسؤولون المشروع بأنه أحد أكبر مشاريع البنية التحتية للنقل الحضري خلال العقد الأخير، ونُفّذ بمشاركة عدة شركات محلية وباستخدام معدات حديثة. ويمتد الخط لأكثر من ثمانية عشر كيلومتراً ويضم اثنتي عشرة محطة، سبع منها متصلة بخطوط مترو أخرى.\n\nوجُهزت محطات الخط بأنظمة تذاكر ذكية ولوحات معلومات لحظية وكاميرات مراقبة. كما أعلن المسؤولون عن خطط لتوسيع خطوط مماثلة في مناطق أخرى من المدينة خلال السنوات المقبلة، مشيرين إلى أن تمويل المرحلة القادمة بات جاهزاً.\n\nويرى محللو النقل الحضري أن الخط الجديد قد يزيد بشكل ملموس من استخدام وسائل النقل العام ويقلّص من التلوث في أكثر مناطق المدينة ازدحاماً."},
+  date:{fa:"جامعه — ۲۸ مرداد ۱۴۰۵، چهارشنبه",en:"Society — Wednesday, Aug 19, 2026",ar:"مجتمع — الأربعاء، ١٩ أغسطس ٢٠٢٦"}},
+
+ {id:2,pos:"side",icon:"economy",thumb:"gold",catKey:"economy",
+  cat:{fa:"اقتصاد",en:"Economy",ar:"اقتصاد"},
+  title:{fa:"رشد صادرات محصولات کشاورزی در فصل تابستان",en:"Agricultural exports rise over the summer season",ar:"ارتفاع صادرات المنتجات الزراعية في الصيف"},
+  detail:{fa:"وزارت جهاد کشاورزی از رشد قابل توجه صادرات محصولات کشاورزی در سه ماه گذشته خبر داد. بر اساس این گزارش، صادرات میوه‌های تابستانه و صیفی‌جات نسبت به مدت مشابه سال قبل رشد چشمگیری داشته و بازارهای جدیدی در منطقه برای این محصولات باز شده است.\n\nمسئولان این وزارتخانه اعلام کردند که بخش قابل توجهی از این رشد ناشی از بهبود زیرساخت‌های حمل‌ونقل سردخانه‌ای و تسهیل فرآیندهای گمرکی برای صادرکنندگان بوده است. همچنین قراردادهای جدیدی با چند کشور همسایه برای صادرات بلندمدت محصولات باغی امضا شده است.\n\nکشاورزان و تشکل‌های صادراتی از این روند استقبال کرده و خواستار ادامه حمایت‌های دولتی از جمله تسهیلات ارزی و کاهش تعرفه‌های صادراتی شده‌اند تا بتوانند در بازارهای رقابتی منطقه سهم بیشتری کسب کنند.",
+  en:"The Agriculture Ministry reported a significant rise in agricultural exports over the past three months. Summer fruit and produce exports grew sharply compared with the same period last year, and new regional markets have opened for these goods.\n\nOfficials said much of the growth stemmed from improved cold-chain transport infrastructure and simplified customs procedures for exporters. New long-term contracts have also been signed with several neighboring countries for orchard products.\n\nFarmers and export associations welcomed the trend and called for continued government support, including currency facilities and lower export tariffs, to gain a larger share of competitive regional markets.",
+  ar:"أعلنت وزارة الزراعة عن ارتفاع ملحوظ في صادرات المنتجات الزراعية خلال الأشهر الثلاثة الماضية. وشهدت صادرات الفواكه والخضروات الصيفية نمواً كبيراً مقارنة بالفترة نفسها من العام الماضي، وانفتحت أسواق إقليمية جديدة لهذه المنتجات.\n\nوقال المسؤولون إن جزءاً كبيراً من هذا النمو يعود إلى تحسّن البنية التحتية للنقل المبرّد وتبسيط الإجراءات الجمركية للمصدّرين. كما وُقّعت عقود جديدة طويلة الأمد مع عدة دول مجاورة لتصدير منتجات البساتين.\n\nورحّب المزارعون واتحادات التصدير بهذا التوجه، وطالبوا باستمرار الدعم الحكومي، بما في ذلك التسهيلات النقدية وخفض الرسوم الجمركية على الصادرات، لزيادة حصتهم في الأسواق الإقليمية التنافسية."},
+  date:{fa:"اقتصاد — ۲۷ مرداد ۱۴۰۵",en:"Economy — Aug 18, 2026",ar:"اقتصاد — ١٨ أغسطس ٢٠٢٦"}},
+
+ {id:3,pos:"side",icon:"sports",thumb:"green",catKey:"sports",
+  cat:{fa:"ورزش",en:"Sports",ar:"رياضة"},
+  title:{fa:"نتایج هفته پایانی لیگ برتر و جدول رده‌بندی",en:"Final matchweek results and the league standings",ar:"نتائج الجولة الأخيرة وترتيب الدوري"},
+  detail:{fa:"هفته پایانی لیگ برتر با نتایج پرهیجانی همراه بود و جدول رده‌بندی نهایی مشخص شد. تیم قهرمان با اختلاف امتیاز اندک از تیم دوم صدرنشین باقی ماند و کارشناسان این فصل را یکی از نزدیک‌ترین فصل‌های اخیر توصیف کرده‌اند.\n\nدر جمع تیم‌های میانی جدول نیز رقابت تا واپسین دقایق ادامه داشت و سهمیه حضور در جام‌های آسیایی در همان هفته پایانی مشخص شد. چند تیم که در نیمه اول فصل در قعر جدول قرار داشتند، با روندی صعودی توانستند رده خود را به‌طور قابل توجهی بهبود دهند.\n\nمراسم اهدای جام قهرمانی روز گذشته با حضور مسئولان ورزشی و هواداران برگزار شد و مدیر تیم قهرمان از برنامه‌ریزی برای حضور قوی‌تر در رقابت‌های آسیایی فصل آینده خبر داد.",
+  en:"The final matchweek of the top league brought thrilling results, settling the final standings. The champion finished narrowly ahead of the runner-up, and analysts have called this one of the closest seasons in recent years.\n\nAmong mid-table teams, the race continued down to the final minutes, with continental qualification spots decided on the last day. Several teams that sat near the bottom of the table in the first half of the season climbed significantly by the end.\n\nThe championship trophy ceremony was held with sports officials and fans in attendance, and the winning team's manager said preparations are underway for a stronger continental campaign next season.",
+  ar:"شهدت الجولة الأخيرة من الدوري الممتاز نتائج مثيرة، وتحدد الترتيب النهائي. وتصدّر الفريق البطل بفارق ضئيل عن الوصيف، ووصف المحللون هذا الموسم بأنه من أكثر المواسم تقارباً في السنوات الأخيرة.\n\nوبين فرق منتصف الجدول، استمر التنافس حتى الدقائق الأخيرة، إذ حُسمت بطاقات التأهل القارية في الجولة الأخيرة. كما تمكنت عدة فرق كانت في أسفل الجدول في النصف الأول من الموسم من تحسين مركزها بشكل ملحوظ.\n\nأُقيم حفل تتويج البطل بحضور مسؤولي الرياضة والجماهير، وأعلن مدرب الفريق البطل عن الاستعداد لمشاركة أقوى في البطولات القارية الموسم المقبل."},
+  date:{fa:"ورزش — ۲۶ مرداد ۱۴۰۵",en:"Sports — Aug 17, 2026",ar:"رياضة — ١٧ أغسطس ٢٠٢٦"}},
+
+ {id:4,pos:"side",icon:"culture",thumb:"gold",catKey:"culture",
+  cat:{fa:"فرهنگ و هنر",en:"Culture & Art",ar:"ثقافة وفن"},
+  title:{fa:"جشنواره موسیقی محلی با استقبال گسترده به کار خود پایان داد",en:"Local music festival closes to widespread turnout",ar:"اختتام مهرجان الموسيقى المحلي بإقبال واسع"},
+  detail:{fa:"جشنواره موسیقی محلی امسال با حضور گروه‌های هنری از سراسر کشور برگزار شد و مورد استقبال گسترده مردم قرار گرفت. برگزارکنندگان اعلام کردند دوره بعدی جشنواره با گسترش برنامه‌ها و افزودن بخش‌های جدید برگزار خواهد شد.\n\nاین رویداد که به مدت پنج روز در فضای باز شهر برپا بود، میزبان بیش از چهل گروه موسیقی محلی و ملی بود و کارگاه‌های آموزشی رایگان برای علاقه‌مندان به سازهای سنتی نیز برگزار شد. بخشی از درآمد فروش بلیت جشنواره به کمک به هنرمندان جوان منطقه اختصاص یافت.\n\nمسئولان فرهنگی شهر گفتند با توجه به استقبال بی‌سابقه امسال، برنامه‌ریزی برای برگزاری جشنواره‌ای بزرگ‌تر و بین‌المللی در سال آینده در دستور کار قرار گرفته است.",
+  en:"This year's local music festival featured artistic groups from across the country and drew a large turnout. Organizers said the next edition will expand its program with new sections added.\n\nThe five-day open-air event hosted more than forty local and national music groups and included free workshops for those interested in traditional instruments. Part of the ticket revenue went toward supporting young artists in the region.\n\nCity cultural officials said that given this year's unprecedented turnout, plans are underway for a larger, international festival next year.",
+  ar:"شارك في مهرجان الموسيقى المحلي هذا العام فرق فنية من مختلف أنحاء البلاد، وحظي بإقبال جماهيري واسع. وأعلن المنظمون أن النسخة القادمة ستشهد توسعاً في البرنامج وإضافة أقسام جديدة.\n\nواستضاف الحدث الذي أقيم في الهواء الطلق لمدة خمسة أيام أكثر من أربعين فرقة موسيقية محلية ووطنية، وتضمن ورش عمل مجانية لمحبي الآلات التقليدية. وخُصص جزء من عائدات بيع التذاكر لدعم الفنانين الشباب في المنطقة.\n\nوقال مسؤولو الثقافة في المدينة إنه نظراً للإقبال غير المسبوق هذا العام، يجري التخطيط لمهرجان أكبر وذي طابع دولي في العام المقبل."},
+  date:{fa:"فرهنگ و هنر — ۲۵ مرداد ۱۴۰۵",en:"Culture & Art — Aug 16, 2026",ar:"ثقافة وفن — ١٦ أغسطس ٢٠٢٦"}},
+
+ {id:5,pos:"latest",icon:"tech",catKey:"tech",
+  cat:{fa:"فناوری",en:"Technology",ar:"تقنية"},
+  title:{fa:"رونمایی از سامانه هوشمند مدیریت ترافیک شهری",en:"Smart traffic management system unveiled",ar:"الكشف عن نظام ذكي لإدارة حركة المرور"},
+  detail:{fa:"شهرداری از سامانه‌ای هوشمند برای مدیریت لحظه‌ای ترافیک رونمایی کرد که با استفاده از دوربین‌ها و حسگرهای هوشمند، زمان چراغ‌های راهنمایی را به‌صورت پویا تنظیم می‌کند. طبق اعلام مسئولان، این سامانه در فاز آزمایشی توانسته زمان تردد در معابر اصلی را کاهش دهد.\n\nاین سامانه که حاصل همکاری شهرداری با چند شرکت دانش‌بنیان داخلی است، داده‌های ترافیکی را به‌صورت لحظه‌ای پردازش کرده و پیش‌بینی می‌کند که در کدام معابر احتمال ایجاد ترافیک سنگین وجود دارد. بر همین اساس، پلیس راهور نیز می‌تواند واکنش سریع‌تری نسبت به شرایط جاده‌ای داشته باشد.\n\nمسئولان اعلام کردند در فاز بعدی، این سامانه به اپلیکیشن موبایل شهروندان متصل خواهد شد تا مسیرهای جایگزین در زمان بروز ترافیک سنگین به کاربران پیشنهاد شود.",
+  en:"City hall unveiled a smart system for real-time traffic management that uses cameras and sensors to dynamically adjust signal timing. Officials say the pilot phase has already reduced travel times on major roads.\n\nDeveloped in partnership with several domestic tech companies, the system processes traffic data in real time and predicts which routes are likely to see heavy congestion. This also allows traffic police to respond more quickly to road conditions.\n\nOfficials said the next phase will connect the system to a citizen mobile app, suggesting alternate routes to users whenever heavy congestion is detected.",
+  ar:"كشفت البلدية عن نظام ذكي لإدارة حركة المرور لحظياً، يستخدم كاميرات وحساسات ذكية لضبط توقيت الإشارات الضوئية ديناميكياً. وأفاد المسؤولون بأن المرحلة التجريبية نجحت بالفعل في تقليص أوقات التنقل على الطرق الرئيسية.\n\nوطُوّر النظام بالتعاون مع عدة شركات تقنية محلية، ويعالج بيانات حركة المرور لحظياً، ويتنبأ بالطرق التي قد تشهد ازدحاماً كثيفاً. ويتيح ذلك أيضاً لشرطة المرور الاستجابة بشكل أسرع لأوضاع الطرق.\n\nوقال المسؤولون إن المرحلة المقبلة ستربط النظام بتطبيق هاتفي للمواطنين، يقترح مسارات بديلة عند رصد ازدحام كثيف."},
+  date:{fa:"فناوری — ۲۸ مرداد ۱۴۰۵",en:"Technology — Aug 19, 2026",ar:"تقنية — ١٩ أغسطس ٢٠٢٦"}},
+
+ {id:6,pos:"latest",icon:"politics",catKey:"politics",
+  cat:{fa:"سیاست",en:"Politics",ar:"سياسة"},
+  title:{fa:"نشست مشترک شهرداران برای هماهنگی طرح‌های عمرانی",en:"Mayors hold joint meeting to coordinate development plans",ar:"اجتماع مشترك للعمد لتنسيق المشاريع التنموية"},
+  detail:{fa:"شهرداران استان در نشستی مشترک درباره هماهنگی طرح‌های عمرانی و زیرساختی گفت‌وگو کردند. در این نشست بر لزوم همکاری بیشتر میان شهرها برای اجرای پروژه‌های مشترک حمل‌ونقل و آب‌رسانی تأکید شد.\n\nدر این نشست که با حضور نمایندگان استانداری نیز برگزار شد، طرح ایجاد یک صندوق مشترک برای تأمین مالی پروژه‌های میان‌شهری مورد بررسی قرار گرفت. شهرداران توافق کردند کارگروه ویژه‌ای برای پیگیری این طرح تشکیل شود و نتیجه بررسی‌ها ظرف دو ماه آینده اعلام شود.\n\nبرخی از شهرداران حاضر در نشست همچنین خواستار تسریع در تخصیص بودجه‌های ملی برای پروژه‌های در حال اجرا شدند تا از توقف کارها در فصل سرما جلوگیری شود.",
+  en:"Provincial mayors met to discuss coordinating development and infrastructure plans. The meeting emphasized the need for closer cooperation between cities on joint transport and water-supply projects.\n\nAttended by representatives from the provincial governor's office, the meeting also reviewed a proposal to create a joint fund for financing inter-city projects. The mayors agreed to form a dedicated working group to follow up, with results expected within two months.\n\nSeveral mayors also called for faster allocation of national budgets to ongoing projects to prevent work from stalling during the colder months.",
+  ar:"اجتمع عمد المحافظة لبحث تنسيق المشاريع التنموية والبنية التحتية. وشدد الاجتماع على ضرورة تعزيز التعاون بين المدن في مشاريع النقل وإمدادات المياه المشتركة.\n\nوبحث الاجتماع، الذي حضره ممثلون عن مكتب المحافظ، مقترحاً لإنشاء صندوق مشترك لتمويل المشاريع بين المدن. واتفق العمد على تشكيل فريق عمل خاص لمتابعة هذا المقترح، على أن تُعلن نتائج الدراسة خلال شهرين.\n\nكما طالب عدد من العمد بالإسراع في تخصيص الموازنات الوطنية للمشاريع الجارية لتفادي توقف الأعمال خلال فصل الشتاء."},
+  date:{fa:"سیاست — ۲۴ مرداد ۱۴۰۵",en:"Politics — Aug 15, 2026",ar:"سياسة — ١٥ أغسطس ٢٠٢٦"}},
+
+ {id:7,pos:"latest",icon:"society",catKey:"society",
+  cat:{fa:"جامعه",en:"Society",ar:"مجتمع"},
+  title:{fa:"افتتاح پارک جدید در منطقه شرقی شهر",en:"New park opens in the city's eastern district",ar:"افتتاح حديقة جديدة في المنطقة الشرقية"},
+  detail:{fa:"پارک جدید شهری در منطقه شرقی با مساحتی بیش از ده هکتار افتتاح شد و دارای مسیرهای پیاده‌روی، زمین‌های ورزشی و فضای ویژه کودکان است و انتظار می‌رود به یکی از مقاصد گردشگری محلی تبدیل شود.\n\nاین پارک که ساخت آن نزدیک به یک سال به طول انجامید، شامل دریاچه مصنوعی، مسیر دوچرخه‌سواری اختصاصی و آمفی‌تئاتر روباز برای برگزاری برنامه‌های فرهنگی است. شهرداری اعلام کرده که از گونه‌های گیاهی بومی منطقه در فضای سبز این پارک استفاده شده تا نیاز به آبیاری کاهش یابد.\n\nساکنان محله‌های اطراف از افتتاح این پارک استقبال کرده‌اند و شهرداری وعده داده در فاز بعدی، امکانات ورزشی بیشتری از جمله زمین بسکتبال و پیست دومیدانی به آن اضافه خواهد شد.",
+  en:"A new city park spanning more than ten hectares opened in the eastern district, including walking paths, sports fields, and a dedicated children's area, and is expected to become a local recreational destination.\n\nConstruction of the park took nearly a year and includes an artificial lake, a dedicated cycling path, and an open-air amphitheater for cultural events. City hall said native plant species were used throughout the green space to reduce irrigation needs.\n\nResidents of nearby neighborhoods have welcomed the park's opening, and city hall has promised additional sports facilities, including a basketball court and running track, in the next phase.",
+  ar:"افتُتحت حديقة مدينة جديدة تمتد على أكثر من عشرة هكتارات في المنطقة الشرقية، وتضم الحديقة مسارات للمشي وملاعب رياضية ومنطقة مخصصة للأطفال، ومن المتوقع أن تصبح وجهة ترفيهية محلية.\n\nواستغرق بناء الحديقة نحو عام كامل، وتضم بحيرة اصطناعية ومساراً مخصصاً لركوب الدراجات ومسرحاً مفتوحاً للفعاليات الثقافية. وأفادت البلدية بأنه تم استخدام نباتات محلية في المساحات الخضراء لتقليل الحاجة إلى الري.\n\nورحّب سكان الأحياء المجاورة بافتتاح الحديقة، ووعدت البلدية بإضافة مرافق رياضية أخرى في المرحلة المقبلة، منها ملعب كرة سلة ومضمار جري."},
+  date:{fa:"جامعه — ۲۳ مرداد ۱۴۰۵",en:"Society — Aug 14, 2026",ar:"مجتمع — ١٤ أغسطس ٢٠٢٦"}},
+
+ {id:8,pos:"latest",icon:"factory",catKey:"economy",
+  cat:{fa:"اقتصاد",en:"Economy",ar:"اقتصاد"},
+  title:{fa:"افزایش نرخ تولید در واحدهای صنعتی کوچک",en:"Production rates rise at small industrial units",ar:"ارتفاع معدلات الإنتاج في الوحدات الصناعية الصغيرة"},
+  detail:{fa:"گزارش‌های جدید نشان می‌دهد نرخ تولید در واحدهای صنعتی کوچک و متوسط نسبت به فصل گذشته افزایش یافته است. کارشناسان این روند را ناشی از بهبود دسترسی به مواد اولیه و تسهیلات جدید بانکی برای این واحدها می‌دانند.\n\nبر اساس آمار منتشرشده، بیشترین رشد تولید در صنایع غذایی و بسته‌بندی ثبت شده و تعداد قابل توجهی از واحدهای راکد نیز طی این مدت فعالیت خود را از سر گرفته‌اند. اتاق بازرگانی اعلام کرده که این روند می‌تواند تأثیر مثبتی بر اشتغال‌زایی در مناطق صنعتی داشته باشد.\n\nمسئولان وزارت صنعت وعده دادند تسهیلات بانکی ویژه واحدهای کوچک در فصل آینده نیز تداوم خواهد یافت و فرآیند دریافت مجوزهای تولید برای متقاضیان جدید ساده‌تر خواهد شد.",
+  en:"New reports show production rates at small and medium industrial units have risen compared with last quarter. Analysts attribute the trend to improved access to raw materials and new banking facilities for these units.\n\nAccording to published figures, the largest growth was recorded in the food and packaging industries, and a notable number of previously idle units have resumed operations. The chamber of commerce said the trend could have a positive effect on job creation in industrial areas.\n\nIndustry ministry officials promised that special banking facilities for small units will continue next quarter, and that the licensing process for new applicants will be simplified.",
+  ar:"تُظهر تقارير جديدة ارتفاع معدلات الإنتاج في الوحدات الصناعية الصغيرة والمتوسطة مقارنة بالربع الماضي. ويعزو المحللون هذا الاتجاه إلى تحسّن الوصول إلى المواد الخام وتسهيلات مصرفية جديدة لهذه الوحدات.\n\nووفق الأرقام المنشورة، سُجّل أكبر نمو في صناعتي الأغذية والتعبئة والتغليف، كما استأنف عدد لافت من الوحدات المتوقفة نشاطه خلال هذه الفترة. وقالت غرفة التجارة إن هذا الاتجاه قد يكون له أثر إيجابي على خلق فرص العمل في المناطق الصناعية.\n\nووعد مسؤولو وزارة الصناعة باستمرار التسهيلات المصرفية الخاصة بالوحدات الصغيرة في الربع المقبل، وتبسيط إجراءات الحصول على تراخيص الإنتاج للمتقدمين الجدد."},
+  date:{fa:"اقتصاد — ۲۲ مرداد ۱۴۰۵",en:"Economy — Aug 13, 2026",ar:"اقتصاد — ١٣ أغسطس ٢٠٢٦"}}
+];
+
+var currentLang = 'fa';
+var currentFilter = 'all';
+
+function pseudoRand(seed){
+  var x = Math.sin(seed*12.9898)*43758.5453;
+  return x - Math.floor(x);
+}
+function daySeed(offset){
+  var d = new Date();
+  d.setDate(d.getDate()+(offset||0));
+  return d.getFullYear()*372 + d.getMonth()*31 + d.getDate();
+}
+function fxValue(base, offset){
+  var pct = (pseudoRand(daySeed(offset))-0.5)*0.03;
+  return Math.round(base*(1+pct));
+}
+function fmt(n){ return n.toLocaleString('en-US'); }
+
+function renderFx(){
+  var bar = document.getElementById('fxBar');
+  var lang = UI[currentLang];
+  var pairs = [{key:'usd',base:234000,short:'$'},{key:'eur',base:267000,short:'€'}];
+  bar.innerHTML = pairs.map(function(p){
+    var today = fxValue(p.base,0);
+    var yest = fxValue(p.base,-1);
+    var diff = today - yest;
+    var up = diff >= 0;
+    var pct = yest? Math.abs(diff/yest*100).toFixed(2) : '0.00';
+    return '<div class="fx-card">'+
+      '<div style="display:flex;align-items:center;gap:10px;">'+
+        '<div class="fx-icon">'+p.short+'</div>'+
+        '<div><div class="fx-name">'+lang[p.key]+'</div><div class="fx-sub">'+lang.today+'</div></div>'+
+      '</div>'+
+      '<div style="text-align:'+(document.documentElement.dir==='rtl'?'left':'right')+';">'+
+        '<div class="fx-price">'+fmt(today)+' '+lang.unit+'</div>'+
+        '<div class="fx-change '+(up?'fx-up':'fx-down')+'">'+(up?'▲':'▼')+' '+fmt(Math.abs(diff))+' ('+pct+'%)</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderNav(){
+  var ul = document.getElementById('navList');
+  ul.innerHTML = NAV_KEYS.map(function(n){
+    return '<li><a class="'+(currentFilter===n[0]?'active':'')+'" onclick="setFilter(\''+n[0]+'\')">'+UI[currentLang][n[1]]+'</a></li>';
+  }).join('');
+}
+
+function setFilter(key){
+  currentFilter = key;
+  renderNav();
+  renderCards();
+}
+
+function delNews(id, ev){
+  ev.stopPropagation();
+  NEWS = NEWS.filter(function(n){ return n.id !== id; });
+  renderCards();
+}
+
+var pendingImgId = null;
+function triggerImgChange(id, ev){
+  ev.stopPropagation();
+  pendingImgId = id;
+  document.getElementById('imgFileInput').click();
+}
+function applyImageToNews(id, file){
+  if(!file || file.type.indexOf('image/')!==0) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var item = NEWS.find(function(n){ return n.id===id; });
+    if(item){ item.img = e.target.result; renderCards(); }
+  };
+  reader.readAsDataURL(file);
+}
+function makeDropTarget(el, id){
+  el.addEventListener('dragover', function(e){ e.preventDefault(); e.stopPropagation(); el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', function(e){ e.stopPropagation(); el.classList.remove('drag-over'); });
+  el.addEventListener('drop', function(e){
+    e.preventDefault(); e.stopPropagation(); el.classList.remove('drag-over');
+    var file = e.dataTransfer.files && e.dataTransfer.files[0];
+    applyImageToNews(id, file);
+  });
+}
+function handleImgFile(ev){
+  var file = ev.target.files && ev.target.files[0];
+  applyImageToNews(pendingImgId, file);
+  pendingImgId = null;
+  ev.target.value = '';
+}
+
+function renderCards(){
+  var side = document.getElementById('sideList');
+  var hero = document.getElementById('heroCard');
+  var latest = document.getElementById('latestGrid');
+  var topGrid = document.getElementById('topGrid');
+  var heading = document.getElementById('sectionHeading');
+  var lang = UI[currentLang];
+  side.innerHTML=''; latest.innerHTML=''; hero.innerHTML='';
+
+  if(currentFilter === 'all'){
+    topGrid.style.display = 'grid';
+    heading.textContent = lang.latestHeading;
+    var heroItem = NEWS.find(function(n){ return n.pos==='hero'; });
+    if(heroItem){
+      hero.className = 'hero' + (heroItem.img ? ' has-img' : '');
+      hero.style.backgroundImage = heroItem.img ? 'url('+heroItem.img+')' : '';
+      hero.innerHTML =
+        '<button class="del-btn" onclick="delNews('+heroItem.id+',event)">×</button>'+
+        '<button class="img-btn" onclick="triggerImgChange('+heroItem.id+',event)">📷</button>'+
+        '<span class="tag">'+lang.featured+'</span>'+
+        '<h1>'+heroItem.title[currentLang]+'</h1>'+
+        '<p>'+heroItem.summary[currentLang]+'</p>'+
+        '<span class="meta">'+heroItem.date[currentLang]+'</span>';
+      hero.onclick=function(){openModal(heroItem);};
+      makeDropTarget(hero, heroItem.id);
+    } else {
+      hero.className = 'hero';
+      hero.style.backgroundImage = '';
+      hero.innerHTML = '<div class="hero-empty">'+lang.noHero+'</div>';
+      hero.onclick = null;
+    }
+    NEWS.filter(function(n){return n.pos==='side';}).forEach(function(n){
+      var div=document.createElement('div');
+      div.className='mini-card';
+      div.onclick=function(){openModal(n);};
+      div.innerHTML =
+        '<button class="del-btn" onclick="delNews('+n.id+',event)">×</button>'+
+        '<button class="img-btn" onclick="triggerImgChange('+n.id+',event)">📷</button>'+
+        '<div class="mini-thumb '+(n.thumb==='green'?'alt':'')+'">'+(n.img?'<img src="'+n.img+'">':ICONS[n.icon])+'</div>'+
+        '<div><span class="cat">'+n.cat[currentLang]+'</span><h3>'+n.title[currentLang]+'</h3></div>';
+      side.appendChild(div);
+      makeDropTarget(div, n.id);
+    });
+    var latestItems = NEWS.filter(function(n){return n.pos==='latest';});
+    if(latestItems.length===0){
+      latest.innerHTML = '<div class="empty-msg">'+lang.noNews+'</div>';
+    }
+    latestItems.forEach(function(n){ latest.appendChild(buildLatestCard(n)); });
+  } else {
+    topGrid.style.display = 'none';
+    var catLabelKey = NAV_KEYS.find(function(k){return k[0]===currentFilter;})[1];
+    heading.textContent = lang[catLabelKey];
+    var items = NEWS.filter(function(n){ return n.catKey === currentFilter; });
+    if(items.length===0){
+      latest.innerHTML = '<div class="empty-msg">'+lang.noNews+'</div>';
+    } else {
+      items.forEach(function(n){ latest.appendChild(buildLatestCard(n)); });
+    }
+  }
+}
+
+function buildLatestCard(n){
+  var c=document.createElement('div');
+  c.className='latest-card';
+  c.onclick=function(){openModal(n);};
+  c.innerHTML =
+    '<button class="del-btn" onclick="delNews('+n.id+',event)">×</button>'+
+    '<button class="img-btn" onclick="triggerImgChange('+n.id+',event)">📷</button>'+
+    '<div class="latest-thumb">'+(n.img?'<img src="'+n.img+'">':ICONS[n.icon])+'</div>'+
+    '<div class="latest-body"><span class="cat">'+n.cat[currentLang]+'</span><h3>'+n.title[currentLang]+'</h3></div>';
+  makeDropTarget(c, n.id);
+  return c;
+}
+
+var CAT_ICON = {politics:"politics",economy:"economy",sports:"sports",tech:"tech",culture:"culture",society:"society"};
+
+function refreshWriteLabels(){
+  var lang = UI[currentLang];
+  document.getElementById('writeHeading').textContent = lang.writeHeading;
+  document.getElementById('lblCat').textContent = lang.lblCat;
+  document.getElementById('lblTitle').textContent = lang.lblTitle;
+  document.getElementById('lblSummary').textContent = lang.lblSummary;
+  document.getElementById('lblDetail').textContent = lang.lblDetail;
+  document.getElementById('wCancel').textContent = lang.wCancel;
+  document.getElementById('wSubmit').textContent = lang.wSubmit;
+  var sel = document.getElementById('wCat');
+  sel.innerHTML = NAV_KEYS.filter(function(k){return k[0]!=='all';}).map(function(k){
+    return '<option value="'+k[0]+'">'+lang[k[1]]+'</option>';
+  }).join('');
+}
+
+function openWriteModal(){
+  refreshWriteLabels();
+  document.getElementById('wTitle').value = '';
+  document.getElementById('wSummary').value = '';
+  document.getElementById('wDetail').value = '';
+  document.getElementById('writeOverlay').classList.add('open');
+}
+function closeWriteModal(){
+  document.getElementById('writeOverlay').classList.remove('open');
+}
+
+function submitNews(){
+  var lang = UI[currentLang];
+  var catKey = document.getElementById('wCat').value;
+  var title = document.getElementById('wTitle').value.trim();
+  var summary = document.getElementById('wSummary').value.trim();
+  var detail = document.getElementById('wDetail').value.trim();
+  if(!title || !detail){
+    alert(lang.needFields);
+    return;
+  }
+  if(!summary) summary = detail.slice(0,120);
+  var newId = Math.max.apply(null, NEWS.map(function(n){return n.id;}).concat([0])) + 1;
+  var catLabel = lang[NAV_KEYS.find(function(k){return k[0]===catKey;})[1]];
+  var entry = {
+    id:newId, pos:"latest", icon:CAT_ICON[catKey]||"society", catKey:catKey,
+    cat:{fa:catLabel,en:catLabel,ar:catLabel},
+    title:{fa:title,en:title,ar:title},
+    summary:{fa:summary,en:summary,ar:summary},
+    detail:{fa:detail,en:detail,ar:detail},
+    date:{fa:catLabel+" — "+lang.justNow,en:catLabel+" — "+lang.justNow,ar:catLabel+" — "+lang.justNow}
+  };
+  NEWS.unshift(entry);
+  closeWriteModal();
+  renderCards();
+}
+
+function openModal(n){
+  document.getElementById('modalHero').innerHTML = n.img ? '<img src="'+n.img+'">' : ICONS[n.icon];
+  document.getElementById('modalCat').textContent = n.cat[currentLang];
+  document.getElementById('modalTitle').textContent = n.title[currentLang];
+  document.getElementById('modalMeta').textContent = n.date[currentLang];
+  var paragraphs = n.detail[currentLang].split(/\n\n+/);
+  document.getElementById('modalText').innerHTML = paragraphs.map(function(p){
+    return '<p>'+p.replace(/</g,'&lt;')+'</p>';
+  }).join('');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function setLang(lang){
+  currentLang = lang;
+  var html = document.documentElement;
+  html.dir = 'rtl';
+  html.lang = lang;
+  document.querySelectorAll('[data-t]').forEach(function(el){
+    el.textContent = UI[lang][el.getAttribute('data-t')];
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+  });
+  renderNav();
+  renderFx();
+  renderCards();
+  refreshWriteLabels();
+}
+
+renderNav();
+renderFx();
+renderCards();
+</script>
+
+</body>
+</html>
